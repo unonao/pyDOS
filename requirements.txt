@@ -1,0 +1,5 @@
+snap-stanford
+matplotlib
+numpy
+pandas
+scipy
