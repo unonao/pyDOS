@@ -9,7 +9,7 @@ def load_graph(filepath):
     """
     Load a graph matrix
     Args:
-        filepath: filepath. It does not matter whether file is 'smat', 'mat' or 'txt'.
+        filepath: filepath. It does not matter whether file extention is 'smat', 'mat' or 'txt'.
     """
     (filepath, ext) = os.path.splitext(filepath)
     if ext == '.smat':
@@ -73,7 +73,7 @@ def load_graph_from_txt(filepath):
     Load a graph matrix from adjacency list(txt)
     The ajacency list must be 0-indexed!
     """
-    data = np.loadtxt(filepath + '.txt')
+    data = np.loadtxt(filepath + '.txt', comments='#')
     row = np.append(data[:, 0], data[:, 1])
     col = np.append(data[:, 1], data[:, 0])
     row = row.astype(int)

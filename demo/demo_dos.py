@@ -7,8 +7,8 @@ import numpy.linalg as LA
 import scipy.sparse.linalg as ssla
 import matplotlib.pyplot as plt
 
-from pyDOS import load_graph, shift_and_rescale_matrix, normalize_matrix
-from pyDOS import cul_for_chebhist, cul_for_cheb_density
+from pyDOS import load_graph, normalize_matrix
+from pyDOS import cal_for_chebhist, cal_for_cheb_density
 from pyDOS import filter_jackson
 from pyDOS.moments import dos_by_cheb
 
@@ -26,11 +26,16 @@ if __name__ == '__main__':
     (H, true_eig_vals) = load_graph(filepath)
     N = H.shape[0]
     print('n: {}'.format(N))
-    if N > 1e3:
-        print('Graph size might be too large for exact computation.')
 
     # normalize matrix
     H = normalize_matrix(H)
+
+    # check size & compute eigenvalues
+    if N > 400:
+        print('Graph size might be too large for exact computation.')
+    else:
+        if true_eig_vals is None:
+            true_eig_vals = LA.eigvalsh(H.toarray())
 
     # c[m] = tr(T_m(H)) (m = 0 to n-1)
     # d[m] = 1/N * tr(T_m(H)) (m = 0 to n-1)
@@ -54,18 +59,18 @@ if __name__ == '__main__':
         lmax = min(max(true_eig_vals), 1)
         plt.hist(true_eig_vals, bins=bin_num)
 
-    # plot with prob function (Gibbs oscillations)
+    # plot prob function
     """
     bin_size = N // bin_num
     X = np.linspace(lmin + 1e-8, lmax - 1e-8, 100)
-    Y = cul_for_cheb_density(df, X) * bin_size
+    Y = cal_for_cheb_density(df, X) * bin_size
     plt.plot(X, Y)
-
-    # the same graph in the papar
     """
+
+    # the same figure in the papar
     X = np.linspace(lmin, lmax, bin_num + 1)
     Xmid = (X[0:-1] + X[1:]) / 2
-    plt.plot(Xmid, cul_for_chebhist(df, X) * N, 'r.', 60)
+    plt.plot(Xmid, cal_for_chebhist(df, X) * N, 'r.', 60)
 
     # setting
     plt.xlim(lmin, lmax)

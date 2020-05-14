@@ -1,25 +1,48 @@
-pyDOS
+Network Density of States in Python3 (pyDOS)
 ==============================
+paper:  [Network Density of States](https://arxiv.org/abs/1905.09758) by Kun Dong, Austin Benson, David Bindel. 
 
-Network Density of States in Python3
+original code(matlab & Python2):  https://github.com/kd383/NetworkDOS.
 
-Project Organization
+Data & library: [SNAP](http://snap.stanford.edu)
+
+Data: [Repository of Difficult Graph Experiments and Results (RODGER)](https://www.cs.purdue.edu/homes/dgleich/rodger/)
+
+## Usage (demo)
+If you want to use `demo_dos.py`,`demo_pdos.py`,`demo_dos_pdos.py`, or `demo_motif.py`, your current directory need to be `demo`.
+
+```
+cd demo
+python demo_dos.py [<filepath> <method> Nz moment_num bin_num is_filter]
+```
+
+## Project Organization
 ------------
-
-    ├── LICENSE
-    ├── data
+    ├── data 
+    │   ├── fetch.sh    <- Download network eigenvalue tarball from David Gleich
+    │   ├── gen_snap.ipynb    <- generate graph using SNAP (Colab)
     │   ├── erdos02-cc.mat   
-    │   └── facebook_combined.txt
+    │   ├── facebook_combined.txt
+    │   └── HepTh.mat
+    │
+    ├── demo
+    │   ├── demo_dos.py    
+    │   ├── demo_pdos.py   
+    │   ├── demo_dos_pdos.py 
+    │   └── demo_motif.py   <- calculate DOS using Motif Filtering
     │
     ├── pyDOS
-    │   └── load_graph.py
+    │   ├── moments     <- only 'cheb' (not 'lan', 'nd', 'exact')
+    │   │   └── dos_by_cheb.py     <- moments for DOS & PDOS by cheb
+    │   ├── cal_for_plot.py
+    │   ├── convert_matrix.py
+    │   ├── load_graph.py
+    │   ├── moment_filter.py    <- only Jackson filter
+    │   ├── motif_filter.py     <- only zero filter
+    │   └── normalize_matrix.py
     │
-    ├── tests
-    │   ├── test_erdos.mat   
-    │   └── test_facebook.py
+    ├── requirements.txt
     │
     └── README.md          <- The top-level README for developers using this project.
 
 --------
-
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>

@@ -7,15 +7,13 @@ import numpy.linalg as LA
 import scipy.sparse.linalg as ssla
 import matplotlib.pyplot as plt
 
-from pyDOS import load_graph, shift_and_rescale_matrix, normalize_matrix
-from pyDOS import cul_for_chebhist, cul_for_cheb_density
+from pyDOS import load_graph, normalize_matrix
 from pyDOS import filter_jackson
-from pyDOS.moments import ldos_by_cheb
+from pyDOS.moments import pdos_by_cheb
 
 if __name__ == '__main__':
     # command line args
-    filepath = '../data/graph-eigs-v1/Erdos02-cc.smat' if len(
-        args) <= 1 else args[1]
+    filepath = '../data/HepTh.mat' if len(args) <= 1 else args[1]
     method = 'cheb' if len(args) <= 2 else str(args[2])
     Nz = 20 if len(args) <= 3 else int(args[3])
     moment_num = 500 if len(args) <= 4 else int(args[4])
@@ -35,7 +33,7 @@ if __name__ == '__main__':
     # c[m] = tr(T_m(H)) (m = 0 to n-1)
     # d[m] = 1/N * tr(T_m(H)) (m = 0 to n-1)
     if method == 'cheb':
-        cl, cstd = ldos_by_cheb(H, N, Nz, moment_num)
+        cl, cstd = pdos_by_cheb(H, N, Nz, moment_num)
         d = cl / N
 
     # filter

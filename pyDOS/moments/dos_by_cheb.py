@@ -5,9 +5,8 @@ import scipy.sparse.linalg as ssla
 
 def dos_by_cheb(H, N, Nz, M, Q=None):
     """
-    Compute a column vector of Chebyshev moments of the form c(m) = tr(T_m(H))
-	for k = 0 to N-1. This routine does no scaling; the spectrum of A should
-	already lie in [-1,1].
+    Compute a column vector of Chebyshev moments of the form c(m) = tr(T_m(H)) for k = 0 to N-1.
+    The spectrum of A should already lie in [-1,1].
     The traces are computed via a stochastic estimator with Nz probe. Probe vectors are np.sign(np.random.randn(N,Nz))
 
     Args:
@@ -42,10 +41,10 @@ def dos_by_cheb(H, N, Nz, M, Q=None):
     return c, cstd
 
 
-def ldos_by_cheb(H, N, Nz, M):
+def pdos_by_cheb(H, N, Nz, M):
     """
-    Compute a column vector (or vectors) of Chebyshev moments of the form c(k,j) = [T_k(A)]_jj for k = 0 to N-1. This routine does no scaling; the spectrum of A should
-	already lie in [-1,1].
+    Compute a column vector (or vectors) of Chebyshev moments of the form c(k,j) = [T_k(A)]_jj for k = 0 to N-1.
+    the spectrum of A should already lie in [-1,1].
 
     Args:
         H: normalized matrix

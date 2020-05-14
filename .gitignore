@@ -2,4 +2,5 @@ __pycache__
 .vscode
 graph-eigs-v1
 plot/*
+data/gen_model
 .DS_Store

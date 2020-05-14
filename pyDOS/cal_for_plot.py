@@ -2,10 +2,9 @@ import numpy as np
 import scipy.sparse.linalg as ssla
 
 
-def cul_for_chebhist(d, X):
+def cal_for_chebhist(d, X):
     """
 	Given a set of first-kind Chebyshev moments, compute the associated density.
-	Output a histogram of cumulative density function by default.
 
 	Args:
 		d: Vector of Chebyshev moments (on [-1,1])
@@ -16,22 +15,21 @@ def cul_for_chebhist(d, X):
 	"""
 
     # Compute CDF and bin the difference
-    Y = cul_for_chebcum(d, X)
+    Y = cal_for_chebcum(d, X)
     Y = Y[1:] - Y[:-1]
 
     return Y
 
 
-def cul_for_chebcum(d, X):
+def cal_for_chebcum(d, X):
     """
 	Given a (filtered) set of first-kind Chebyshev moments, compute the integral
 	of the density:
 		int_0^s (2/pi)*sqrt(1-x^2)*( d(0)/2+sum_{n=1}^{N-1}c_nT_n(x) )
-	Output a plot of cumulative density function by default.
 
 	Args:
 		d: Array of Chebyshev moments (on [-1,1])
-		X: Evaluation points (defaults to mesh of 1001 pts)
+		X: Evaluation points
 
 	Output:
 		Y: Estimated cumulative density up to each X point
@@ -48,7 +46,7 @@ def cul_for_chebcum(d, X):
     return Y
 
 
-def cul_for_cheb_density(d, X):
+def cal_for_cheb_density(d, X):
     """
 	Given a set of first-kind Chebyshev moments, compute the associated density.
 

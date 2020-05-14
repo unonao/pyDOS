@@ -7,8 +7,8 @@ import numpy.linalg as LA
 import scipy.sparse.linalg as ssla
 import matplotlib.pyplot as plt
 
-from pyDOS import load_graph, shift_and_rescale_matrix, normalize_matrix
-from pyDOS import cul_for_chebhist, cul_for_cheb_density
+from pyDOS import load_graph, normalize_matrix
+from pyDOS import cal_for_chebhist, cal_for_cheb_density
 from pyDOS import filter_jackson
 from pyDOS import zero_filter
 from pyDOS.moments import dos_by_cheb
@@ -56,15 +56,12 @@ if __name__ == '__main__':
         lmax = min(max(true_eig_vals), 1)
         plt.hist(true_eig_vals, bins=bin_num)
 
-    # the same graph in the papar
     X = np.linspace(lmin, lmax, bin_num + 1)
     Xmid = (X[0:-1] + X[1:]) / 2
-    Y = cul_for_chebhist(df, X) * N
-    # zero filter
-    """
+    Y = cal_for_chebhist(df, X) * N
+    # add zero motif
     zero_ind = np.argmax(X > 0) - 1
     Y[zero_ind] += Q.shape[1]
-    """
     plt.plot(Xmid, Y, 'r.', 60)
 
     plt.xlim(lmin, lmax)
