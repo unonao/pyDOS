@@ -1,8 +1,8 @@
 __pycache__
 .vscode
-graph-eigs-v1
 plot/*
 data/gen_model
 data/konect
 data/snap
+data/graph-eigs-v1
 .DS_Store
