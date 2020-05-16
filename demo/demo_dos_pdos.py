@@ -65,10 +65,11 @@ if __name__ == '__main__':
         ax1.hist(true_eig_vals, bins=bin_num)
     X = np.linspace(lmin, lmax, bin_num + 1)
     Xmid = (X[0:-1] + X[1:]) / 2
-    ax1.plot(Xmid, cal_for_chebhist(df, X) * N, 'r.', 60)
+    Ymid = cal_for_chebhist(df, X) * N
+    ax1.plot(Xmid, Ymid, 'r.', 60)
     #### setting
     ax1.set_xlim(lmin, lmax)
-    #plt.ylim(0, 500)
+    ax1.set_ylim(0)
     plot_title = 'DOS (Nz:{}, M:{}, filter:{})'.format(
         Nz, moment_num, 'Jackson' if is_filter else 'None')
     ax1.set_title(plot_title)

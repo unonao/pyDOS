@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     # setting
     plt.xlim(lmin, lmax)
-    #plt.ylim(0, 500)
+    plt.ylim(0)
     plot_title = 'DOS (Nz:{}, M:{}, filter:{})'.format(
         Nz, moment_num, 'Jackson' if is_filter else 'None')
     plt.title(plot_title)
