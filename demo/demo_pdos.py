@@ -73,4 +73,12 @@ if __name__ == '__main__':
     plt.imshow(Y[idx, :], cmap='jet', aspect='auto', extent=extent)
     plt.xlabel('λ')
     plt.ylabel('Node Index')
+
+    base_name = os.path.basename(filepath)
+
+    plot_title = 'PDOS: {} (Nz:{}, M:{}, bins:{})'.format(
+        base_name, Nz, moment_num, bin_num)
+    plt.title(plot_title)
+
+    plt.savefig('../plot/' + base_name + '_pdos.png')
     plt.show()

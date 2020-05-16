@@ -83,10 +83,14 @@ if __name__ == '__main__':
     # setting
     plt.xlim(lmin, lmax)
     plt.ylim(0)
-    plot_title = 'DOS (Nz:{}, M:{}, filter:{})'.format(
-        Nz, moment_num, 'Jackson' if is_filter else 'None')
+
+    base_name = os.path.basename(filepath)
+
+    plot_title = 'DOS: {} (Nz:{}, M:{}, bins:{})'.format(
+        base_name, Nz, moment_num, bin_num)
     plt.title(plot_title)
     plt.xlabel('λ')
     plt.ylabel('Count')
-    plt.legend()
+
+    plt.savefig('../plot/' + base_name + '_dos.png')
     plt.show()

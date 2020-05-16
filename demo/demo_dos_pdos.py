@@ -78,9 +78,7 @@ if __name__ == '__main__':
     #### setting
     ax1.set_xlim(lmin, lmax)
     ax1.set_ylim(0)
-    plot_title = 'DOS (Nz:{}, M:{}, filter:{})'.format(
-        Nz, moment_num, 'Jackson' if is_filter else 'None')
-    ax1.set_title(plot_title)
+    ax1.set_title('DOS')
     ax1.set_xlabel('λ')
     ax1.set_ylabel('Count')
 
@@ -117,14 +115,17 @@ if __name__ == '__main__':
 
     extent = -1, 1, N, 0
     ax2.imshow(Y[idx, :], cmap='jet', aspect='auto', extent=extent)
-    plot_title = 'PDOS (Nz:{}, M:{}, filter:{})'.format(
-        Nz, moment_num, 'Jackson' if is_filter else 'None')
-    ax2.set_title(plot_title)
+    ax2.set_title("PDOS")
     ax2.set_xlabel('λ')
     ax2.set_ylabel('Node Index')
 
     #
     # fig show
     #
-    fig.suptitle('DOS & PDOS ({})'.format(os.path.basename(filepath)))
+    base_name = os.path.basename(filepath)
+
+    plot_title = '{} (Nz:{}, M:{}, bins:{})'.format(base_name, Nz, moment_num,
+                                                    bin_num)
+    fig.suptitle(plot_title)
+    plt.savefig('../plot/' + base_name + '_dos_pdos.png')
     plt.show()

@@ -74,11 +74,15 @@ if __name__ == '__main__':
     plt.plot(Xmid, Y, 'r.', 60)
 
     plt.xlim(lmin, lmax)
-    #plt.ylim(0, 500)
-    plot_title = 'DOS (Nz:{}, M:{}, filter:{})'.format(
-        Nz, moment_num, 'Jackson' if is_filter else 'None')
+    plt.ylim(0)
+
+    base_name = os.path.basename(filepath)
+
+    plot_title = 'DOS(motif): {} (Nz:{}, M:{}, bins:{})'.format(
+        base_name, Nz, moment_num, bin_num)
     plt.title(plot_title)
     plt.xlabel('λ')
     plt.ylabel('Count')
-    plt.legend()
+
+    plt.savefig('../plot/' + base_name + '_dos_motif.png')
     plt.show()
