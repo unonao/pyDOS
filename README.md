@@ -8,6 +8,10 @@ Data & library: [SNAP](http://snap.stanford.edu)
 
 Data: [Repository of Difficult Graph Experiments and Results (RODGER)](https://www.cs.purdue.edu/homes/dgleich/rodger/)
 
+Data: [The KONECT Project](http://konect.cc)
+
+Data: [The SuiteSparse Matrix Collection (formerly the University of Florida Sparse Matrix Collection)](https://sparse.tamu.edu)
+
 ## Usage (demo)
 If you want to use `demo_dos.py`,`demo_pdos.py`,`demo_dos_pdos.py`, or `demo_motif.py`, your current directory need to be `demo`.
 
@@ -29,7 +33,8 @@ python demo_dos.py [<filepath> <method> Nz moment_num bin_num is_filter]
     │   ├── demo_dos.py    
     │   ├── demo_pdos.py   
     │   ├── demo_dos_pdos.py 
-    │   └── demo_motif.py   <- calculate DOS using Motif Filtering
+    │   ├── demo_motif.py   <- calculate DOS using Motif Filtering
+    │   └── demo_heatmap.py <- calculate cosine distance of DOS and show heatmap
     │
     ├── pyDOS
     │   ├── moments     <- only 'cheb' (not 'lan', 'nd', 'exact')
@@ -42,6 +47,8 @@ python demo_dos.py [<filepath> <method> Nz moment_num bin_num is_filter]
     │   └── normalize_matrix.py
     │
     ├── requirements.txt
+    │
+    ├── heatmap.png <- cosine distances of DOS
     │
     └── README.md          <- The top-level README for developers using this project.
 

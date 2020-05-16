@@ -3,4 +3,6 @@ __pycache__
 graph-eigs-v1
 plot/*
 data/gen_model
+data/konect
+data/snap
 .DS_Store

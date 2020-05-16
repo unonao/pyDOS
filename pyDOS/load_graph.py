@@ -72,10 +72,18 @@ def load_graph_from_mat(filepath, mname='A'):
     """
     (filepath, ext) = os.path.splitext(filepath)
     data = sio.loadmat(filepath)
+
+    # matrix
+    if "Problem" in data.keys():  # for The SuiteSparse Matrix Collection
+        H = ss.csr_matrix(data["Problem"][0, 0]["A"])
+    else:  # for snap
+        H = ss.csr_matrix(data[mname])
+
+    # lambda
     if "lambda" in data.keys():
-        return ss.csr_matrix(data[mname]), data["lambda"].flatten()
+        return H, data["lambda"].flatten()
     else:
-        return ss.csr_matrix(data[mname]), None
+        return H, None
 
 
 def load_graph_from_txt(filepath):
