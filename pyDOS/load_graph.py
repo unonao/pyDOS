@@ -7,7 +7,7 @@ import scipy.sparse as ss
 
 def load_graph(filepath):
     """
-    Load a graph matrix
+    Load a graph matrix as an undirected graph
     Args:
         filepath: filepath. It does not matter whether file extention is 'smat', 'mat' or 'txt'.
 
@@ -48,8 +48,8 @@ def load_graph_from_smat(filepath):
 
     # load normalized eigenvalues (if exist)
     eig_vals = None
-    if os.path.isfile(filepath + 'normalized.eigs'):
-        eig_vals = np.loadtxt(filepath + 'normalized.eigs')
+    if os.path.isfile(filepath + '.normalized.eigs'):
+        eig_vals = np.loadtxt(filepath + '.normalized.eigs')
 
     # compute eigenvalues (if not exist & possible)
     if eig_vals is None:
