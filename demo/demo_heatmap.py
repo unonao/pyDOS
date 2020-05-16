@@ -30,22 +30,24 @@ if __name__ == '__main__':
 
     par_dir = '../data/'
     files = [
-        #sparse
-        "graph-eigs-v1/Erdos02-cc.smat",
         "HepTh.mat",
         # social
         "graph-eigs-v1/marvel-chars-cc.smat",
         "snap/facebook_combined.txt",
         "konect/ca-AstroPh/out.ca-AstroPh",
+        #
+        "graph-eigs-v1/Erdos02-cc.smat",
         # hyper-link
+        "konect/web-NotreDame/out.web-NotreDame",
         "konect/web-Stanford/out.web-Stanford",
+        # infrastructure
+        "konect/openflights/out.openflights",
+        "konect/opsahl-usairport/out.opsahl-usairport",
+        "konect/opsahl-powergrid/out.opsahl-powergrid",
         # road network
         "minnesota.mat",
         "snap/roadNet-CA.txt",
         "konect/dimacs9-NY/out.dimacs9-NY",
-        # infrastructure
-        "konect/openflights/out.openflights",
-        "konect/opsahl-powergrid/out.opsahl-powergrid",
         # models
         "gen_model/Erdos-Renyi_random_graph_3000_30000.txt",
         "gen_model/scale-free_3000_5.txt",
