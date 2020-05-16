@@ -17,13 +17,20 @@ if __name__ == '__main__':
     method = 'cheb' if len(args) <= 2 else str(args[2])
     Nz = 20 if len(args) <= 3 else int(args[3])
     moment_num = 500 if len(args) <= 4 else int(args[4])
-    bin_num = 50 if len(args) <= 5 else int(args[5])
+    bin_num = 51 if len(args) <= 5 else int(args[5])
     is_filter = True if len(args) <= 6 else bool(args[6])
-    print(method)
     # load graph network
     (H, true_eig_vals) = load_graph(filepath)
     N = H.shape[0]
-    print('n: {}'.format(N))
+
+    print("method:\t{}".format(method))
+    print('Nz:\t{}'.format(Nz))
+    print('moments:\t{}'.format(moment_num))
+    print('bins:\t{}'.format(bin_num))
+    print('filter:\t{}'.format('Jackson' if is_filter else 'None'))
+    print('N:\t{}'.format(N))
+    print('M:\t{}'.format(H.count_nonzero()))
+
     if N > 1e3:
         print('Graph size might be too large for exact computation.')
 

@@ -4,6 +4,7 @@ sys.path.append('../')
 args = sys.argv
 import numpy as np
 import numpy.linalg as LA
+import scipy.sparse as ss
 import scipy.sparse.linalg as ssla
 import matplotlib.pyplot as plt
 
@@ -18,16 +19,23 @@ if __name__ == '__main__':
     filepath = '../data/facebook_combined.txt' if len(args) <= 1 else args[1]
     method = 'cheb' if len(args) <= 2 else str(args[2])
     Nz = 20 if len(args) <= 3 else int(args[3])
-    moment_num = 1000 if len(args) <= 4 else int(args[4])
-    bin_num = 50 if len(args) <= 5 else int(args[5])
+    moment_num = 500 if len(args) <= 4 else int(args[4])
+    bin_num = 51 if len(args) <= 5 else int(
+        args[5])  # bin_num should be odd (to avoid splitting true λ=0)
     is_filter = True if len(args) <= 6 else bool(args[6])
-
-    print("method:", method)
 
     # load graph network
     (H, true_eig_vals) = load_graph(filepath)
+
     N = H.shape[0]
-    print('vertex size: {}'.format(N))
+
+    print("method:\t{}".format(method))
+    print('Nz:\t{}'.format(Nz))
+    print('moments:\t{}'.format(moment_num))
+    print('bins:\t{}'.format(bin_num))
+    print('filter:\t{}'.format('Jackson' if is_filter else 'None'))
+    print('N:\t{}'.format(N))
+    print('M:\t{}'.format(H.count_nonzero()))
 
     # normalize matrix
     H = normalize_matrix(H)
@@ -59,11 +67,11 @@ if __name__ == '__main__':
 
     lmin = -1
     lmax = 1
+    X = np.linspace(lmin, lmax, bin_num + 1)
     if true_eig_vals is not None:
         #lmin = max(min(true_eig_vals), -1)
         #lmax = min(max(true_eig_vals), 1)
-        ax1.hist(true_eig_vals, bins=bin_num)
-    X = np.linspace(lmin, lmax, bin_num + 1)
+        ax1.hist(true_eig_vals, bins=X)
     Xmid = (X[0:-1] + X[1:]) / 2
     Ymid = cal_for_chebhist(df, X) * N
     ax1.plot(Xmid, Ymid, 'r.', 60)

@@ -19,13 +19,21 @@ if __name__ == '__main__':
     method = 'cheb' if len(args) <= 2 else str(args[2])
     Nz = 20 if len(args) <= 3 else int(args[3])
     moment_num = 500 if len(args) <= 4 else int(args[4])
-    bin_num = 50 if len(args) <= 5 else int(args[5])
+    bin_num = 51 if len(args) <= 5 else int(
+        args[5])  # bin_num should be odd (to avoid splitting true λ=0)
     is_filter = True if len(args) <= 6 else bool(args[6])
-    print(method)
+
     # load graph network
     (H, true_eig_vals) = load_graph(filepath)
     N = H.shape[0]
-    print('n: {}'.format(N))
+
+    print("method:\t{}".format(method))
+    print('Nz:\t{}'.format(Nz))
+    print('moments:\t{}'.format(moment_num))
+    print('bins:\t{}'.format(bin_num))
+    print('filter:\t{}'.format('Jackson' if is_filter else 'None'))
+    print('N:\t{}'.format(N))
+    print('M:\t{}'.format(H.count_nonzero()))
 
     # normalize matrix
     H = normalize_matrix(H)
@@ -54,10 +62,11 @@ if __name__ == '__main__':
     lmin = -1
     lmax = 1
     plt.figure()
+    X = np.linspace(lmin, lmax, bin_num + 1)
     if true_eig_vals is not None:
-        lmin = max(min(true_eig_vals), -1)
-        lmax = min(max(true_eig_vals), 1)
-        plt.hist(true_eig_vals, bins=bin_num)
+        #lmin = max(min(true_eig_vals), -1)
+        #lmax = min(max(true_eig_vals), 1)
+        plt.hist(true_eig_vals, bins=X)
 
     # plot prob function
     """
@@ -68,7 +77,6 @@ if __name__ == '__main__':
     """
 
     # the same figure in the papar
-    X = np.linspace(lmin, lmax, bin_num + 1)
     Xmid = (X[0:-1] + X[1:]) / 2
     plt.plot(Xmid, cal_for_chebhist(df, X) * N, 'r.', 60)
 
