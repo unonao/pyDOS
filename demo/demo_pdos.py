@@ -3,7 +3,7 @@ import sys
 sys.path.append('../')
 args = sys.argv
 import numpy as np
-import numpy.linalg as LA
+from scipy import linalg
 import scipy.sparse.linalg as ssla
 import matplotlib.pyplot as plt
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     # plot ldos
     # Run the recurrence to compute CDF
-    X = np.linspace(-1 + 1e-8, 1 - 1e-8, bin_num).reshape(1, bin_num)
+    X = np.linspace(-1 + 1e-8, 1 - 1e-8, bin_num + 1).reshape(1, bin_num + 1)
     tX = np.arccos(X)
     Y = df[0, :].reshape(N, 1) * (tX - np.pi) / 2
     for i in range(1, moment_num):
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     # Difference the CDF to compute histogram
     Y = Y[:, 1:] - Y[:, 0:-1]
 
-    U, S, V = LA.svd(Y)
+    U, _, _ = linalg.svd(Y, full_matrices=False)
     idx = np.argsort(U[:, 0])
     bot = np.min(Y)
     top = np.max(Y)
