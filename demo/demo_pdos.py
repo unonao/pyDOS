@@ -29,7 +29,7 @@ if __name__ == '__main__':
     print('bins:\t{}'.format(bin_num))
     print('filter:\t{}'.format('Jackson' if is_filter else 'None'))
     print('N:\t{}'.format(N))
-    print('M:\t{}'.format(H.count_nonzero()))
+    print('nonzero:\t{}'.format(H.count_nonzero()))
 
     if N > 1e3:
         print('Graph size might be too large for exact computation.')
