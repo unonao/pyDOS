@@ -30,14 +30,18 @@ if __name__ == '__main__':
 
     par_dir = '../data/'
     files = [
-        "HepTh.mat",
-        # social
+        # social networks
         "graph-eigs-v1/marvel-chars-cc.smat",
         "snap/facebook_combined.txt",
+        "snap/soc-Epinions1.txt",
+        # collaboration networks
         "konect/ca-AstroPh/out.ca-AstroPh",
-        #
-        "graph-eigs-v1/Erdos02-cc.smat",
-        # hyper-link
+        # communication networks
+        "snap/Email-Enron.txt",
+        "snap/Email-EuAll.txt",
+        # Autonomous systems
+        "graph-eigs-v1/Erdos02-cc.smat",  #(Erdos02-cc - Pajek's Erdos sample file, largest connected component.as-caida20060911 - SNAP)
+        # hyper-link(web graph)
         "konect/web-NotreDame/out.web-NotreDame",
         "konect/web-Stanford/out.web-Stanford",
         # infrastructure
@@ -49,10 +53,15 @@ if __name__ == '__main__':
         "snap/roadNet-CA.txt",
         "konect/dimacs9-NY/out.dimacs9-NY",
         # models
+        "gen_model/Erdos-Renyi_random_graph_3000_3000.txt",
         "gen_model/Erdos-Renyi_random_graph_3000_30000.txt",
+        "gen_model/scale-free_3000_1.txt",
         "gen_model/scale-free_3000_5.txt",
+        "gen_model/small_world_5000_5_0.010.txt",
         "gen_model/small_world_5000_5_0.100.txt",
+        "gen_model/forest_fire_5000_0.40_0.30.txt",
         "gen_model/forest_fire_5000_0.45_0.30.txt",
+        "gen_model/copying_model_5000_0.50.txt",
         "gen_model/grid_graph_200_200.txt",
         "gen_model/grid_graph_deleted_200_200.txt"
     ]
@@ -64,6 +73,11 @@ if __name__ == '__main__':
     print('filter:\t{}'.format('Jackson' if is_filter else 'None'))
 
     num = len(files)
+    for i in range(num):
+        filepath = par_dir + files[i]
+        if os.path.isfile(filepath) is False:
+            print("WARN:", file[i], " not found.")
+
     dos = np.empty((0, bin_num), float)
     label = []
     for i in range(num):
@@ -128,7 +142,7 @@ if __name__ == '__main__':
         for j in range(num):
             dist[i, j] = distance.cosine(dos[i], dos[j])
     df = pd.DataFrame(data=dist, index=label, columns=label)
-    plt.figure(figsize=(15, 15))
+    plt.figure(figsize=(30, 30))
     plt.subplots_adjust(left=0.25, right=0.95, bottom=0.2)
     sns.heatmap(df, square=True, vmax=1, vmin=0, annot=True)
     plt.title("cosine distances")
