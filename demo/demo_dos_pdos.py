@@ -126,6 +126,5 @@ if __name__ == '__main__':
     #
     # fig show
     #
-    (filepath_no_ext, ext) = os.path.splitext(filepath)
-    fig.suptitle('DOS & PDOS ({})'.format(os.path.basename(filepath_no_ext)))
+    fig.suptitle('DOS & PDOS ({})'.format(os.path.basename(filepath)))
     plt.show()
