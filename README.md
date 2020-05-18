@@ -48,7 +48,7 @@ python demo_dos.py [<filepath> <method> Nz moment_num bin_num is_filter]
     │
     ├── requirements.txt
     │
-    ├── heatmap.png <- cosine distances of DOS
+    ├── heatmap_{kind}_{bin_num}.png <- cosine distances of DOS (kind 0: unsorted, 1: sorted by degree)
     │
     └── README.md          <- The top-level README for developers using this project.
 

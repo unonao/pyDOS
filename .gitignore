@@ -1,6 +1,8 @@
 __pycache__
 .vscode
 plot/*
+moments_db/*
+!moments_db
 data/gen_model
 data/konect
 data/snap

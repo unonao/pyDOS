@@ -21,15 +21,21 @@ from pyDOS.moments import dos_by_cheb
 
 if __name__ == '__main__':
     # command line args
-    method = 'cheb' if len(args) <= 1 else str(args[1])
-    Nz = 20 if len(args) <= 2 else int(args[2])
-    moment_num = 500 if len(args) <= 3 else int(args[3])
-    bin_num = 51 if len(args) <= 4 else int(
-        args[4])  # bin_num should be odd (to avoid splitting true λ=0)
-    is_filter = True if len(args) <= 5 else bool(args[5])
+    kind = 0 if len(args) <= 1 else int(
+        args[1])  # 0: unsort, 1: sort by degree
+    bin_num = 51 if len(args) <= 2 else int(
+        args[2])  # bin_num should be odd (to avoid splitting true λ=0)
+
+    method = 'cheb' if len(args) <= 3 else args[3]
+    Nz = 30 if len(args) <= 4 else int(args[4])
+    moment_num = 1000 if len(args) <= 5 else int(args[5])
+    is_filter = True if len(args) <= 6 else bool(args[6])
 
     par_dir = '../data/'
+    db_dir = '../moments_db/'
     files = [
+        # human social networks
+        "konect/moreno_health/out.moreno_health_health",
         # social networks
         "graph-eigs-v1/marvel-chars-cc.smat",
         "snap/facebook_combined.txt",
@@ -38,8 +44,7 @@ if __name__ == '__main__':
         "konect/ca-AstroPh/out.ca-AstroPh",
         # communication networks
         "snap/Email-Enron.txt",
-        "snap/Email-EuAll.txt",
-        # Autonomous systems
+        "snap/Email-EuAll.txt",  # Autonomous systems
         "graph-eigs-v1/Erdos02-cc.smat",  #(Erdos02-cc - Pajek's Erdos sample file, largest connected component.as-caida20060911 - SNAP)
         # hyper-link(web graph)
         "konect/web-NotreDame/out.web-NotreDame",
@@ -76,75 +81,95 @@ if __name__ == '__main__':
     for i in range(num):
         filepath = par_dir + files[i]
         if os.path.isfile(filepath) is False:
-            print("WARN:", file[i], " not found.")
+            print("WARN:", files[i], " not found.")
 
-    dos = np.empty((0, bin_num), float)
-    label = []
+    doss = np.empty((0, bin_num), float)
+    labels = np.empty(0)
+    sort_vals = np.empty(0)
     for i in range(num):
+        base_name = os.path.basename(files[i])
+        dbpath = db_dir + base_name + '_{}.npy'.format(moment_num)
         filepath = par_dir + files[i]
+
+        print("file: " + filepath, end="\t")
+        df = None
         if os.path.isfile(filepath) is False:
             continue
-        print(filepath)
-        # load graph network
+
         (H, true_eig_vals) = load_graph(filepath)
         N = H.shape[0]
-        # normalize matrix
-        H = normalize_matrix(H)
-        # check size & compute eigenvalues
-        if N < 400:
-            if true_eig_vals is None:
-                true_eig_vals = LA.eigvalsh(H.toarray())
+        if (N < 300) and (true_eig_vals is None):
+            true_eig_vals = LA.eigvalsh(H.toarray())
 
-        if method == 'cheb':
-            c, cstd = dos_by_cheb(H, N, Nz, moment_num)
-            d = c / N
+        if kind == 1:  # sort by degree
+            sort_vals = np.append(sort_vals, H.sum() / N)
 
-        # filter
-        if is_filter:
-            df = filter_jackson(d)
-        else:
-            df = cf
-
-        # plot
-        lmin = -1
-        lmax = 1
-        plt.figure()
-        X = np.linspace(lmin, lmax, bin_num + 1)
+        dos = None
         if true_eig_vals is not None:
+            print("use true eigenvalues")
             eig_hist, _, _ = plt.hist(true_eig_vals, bins=X)
-        Xmid = (X[0:-1] + X[1:]) / 2
-        Ymid = cal_for_chebhist(df, X) * N
-        plt.plot(Xmid, Ymid, 'r.', 60)
-        # setting
-        plt.xlim(lmin, lmax)
-        plt.ylim(0)
-
-        base_name = os.path.basename(filepath)
-
-        plot_title = 'DOS: {} (Nz:{}, M:{}, bins:{} )'.format(
-            base_name, Nz, moment_num, bin_num)
-        plt.title(plot_title)
-        plt.xlabel('λ')
-        plt.ylabel('Count')
-        plt.savefig('../plot/' + base_name + '_dos.png')
-        plt.close()
-
-        # store dos
-        if true_eig_vals is not None:
-            dos = np.append(dos, eig_hist.reshape(1, bin_num), axis=0)
+            dos = eig_hist.reshape(1, bin_num)
         else:
-            dos = np.append(dos, Ymid.reshape(1, bin_num), axis=0)
-        label.append(base_name)
+            if os.path.isfile(
+                    dbpath):  # If moments have already been calculated
+                print("already calculated")
+                df = np.load(dbpath)
+            else:
+                print("calculating...")
+                # load graph network
+                # normalize matrix
+                H = normalize_matrix(H)
 
-    num = len(dos)
+                # calculate moment
+                if method == 'cheb':
+                    c, cstd = dos_by_cheb(H, N, Nz, moment_num)
+                    d = c / N
+                # filter
+                if is_filter:
+                    df = filter_jackson(d)
+                else:
+                    df = cf
+                np.save(dbpath, df)
+
+            # plot
+            lmin = -1
+            lmax = 1
+            plt.figure()
+            X = np.linspace(lmin, lmax, bin_num + 1)
+            Xmid = (X[0:-1] + X[1:]) / 2
+            Ymid = cal_for_chebhist(df, X) * N
+            plt.plot(Xmid, Ymid, 'r.', 60)
+            # setting
+            plt.xlim(lmin, lmax)
+            plt.ylim(0)
+            plot_title = 'DOS: {} (Nz:{}, M:{}, bins:{} )'.format(
+                base_name, Nz, moment_num, bin_num)
+            plt.title(plot_title)
+            plt.xlabel('λ')
+            plt.ylabel('Count')
+            plt.savefig('../plot/' + base_name + '_dos.png')
+            plt.close()
+
+            dos = Ymid.reshape(1, bin_num)
+
+        doss = np.append(doss, dos, axis=0)
+        labels = np.append(labels, base_name)
+
+    num = len(doss)
     dist = np.ndarray((num, num))
+    if kind > 0:
+        ids = np.argsort(sort_vals)
+        doss = doss[ids]
+        labels = labels[ids]
+        print(sort_vals[ids])
     for i in range(num):
         for j in range(num):
-            dist[i, j] = distance.cosine(dos[i], dos[j])
-    df = pd.DataFrame(data=dist, index=label, columns=label)
-    plt.figure(figsize=(30, 30))
+            dist[i, j] = distance.cosine(doss[i], doss[j])
+    df = pd.DataFrame(data=dist, index=labels, columns=labels)
+    plt.close()
+    plt.figure(figsize=(num + 5, num + 5))
     plt.subplots_adjust(left=0.25, right=0.95, bottom=0.2)
     sns.heatmap(df, square=True, vmax=1, vmin=0, annot=True)
     plt.title("cosine distances")
-    plt.savefig('../heatmap.png')
+    plt.savefig('../heatmap_{}_{}.png'.format(kind, bin_num))
     plt.show()
