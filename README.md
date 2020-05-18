@@ -46,9 +46,11 @@ python demo_dos.py [<filepath> <method> Nz moment_num bin_num is_filter]
     │   ├── motif_filter.py     <- only zero filter
     │   └── normalize_matrix.py
     │
+    ├── moments_db <- save moments for demo_heatmap.py
+    │
     ├── requirements.txt
     │
-    ├── heatmap_{kind}_{bin_num}.png <- cosine distances of DOS (kind 0: unsorted, 1: sorted by degree)
+    ├── heatmap_{kind}_{bin_num}.png <- cosine distances of DOS (kind 0: unsorted, 1: sorted by average degree)
     │
     └── README.md          <- The top-level README for developers using this project.
 
