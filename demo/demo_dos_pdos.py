@@ -29,13 +29,15 @@ if __name__ == '__main__':
 
     N = H.shape[0]
 
+    print("file: " + filepath)
     print("method:\t{}".format(method))
     print('Nz:\t{}'.format(Nz))
     print('moments:\t{}'.format(moment_num))
     print('bins:\t{}'.format(bin_num))
     print('filter:\t{}'.format('Jackson' if is_filter else 'None'))
-    print('N:\t{}'.format(N))
-    print('nonzero:\t{}'.format(H.count_nonzero()))
+    print('V:\t{}'.format(N))
+    print('E:\t{}'.format(H.count_nonzero() // 2))
+    print('average degree:\t{}'.format(H.count_nonzero() / N))
 
     # normalize matrix
     H = normalize_matrix(H)
