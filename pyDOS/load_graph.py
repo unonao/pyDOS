@@ -3,6 +3,9 @@ import numpy as np
 import numpy.linalg as LA
 import scipy.io as sio
 import scipy.sparse as ss
+from scipy.sparse import SparseEfficiencyWarning
+import warnings
+#warnings.simplefilter('ignore', SparseEfficiencyWarning)
 
 
 def load_graph(filepath):
@@ -20,6 +23,8 @@ def load_graph(filepath):
         return load_graph_from_mat(filepath)
     elif ext == '.txt':
         return load_graph_from_txt(filepath)
+    elif ext == '.csv':
+        return load_graph_from_csv(filepath)
     else:
         if name == 'out':  # for konect data
             return load_graph_from_konect(filepath)
@@ -33,18 +38,20 @@ def load_graph_from_smat(filepath):
         mname: matrix name
     """
     # load graph
-    data = np.loadtxt(filepath)
+    data = np.loadtxt(filepath, dtype=int)
     N = data[0, 0]
     data = data[1:, :]
-    row = np.append(data[:, 0], data[:, 1])
-    col = np.append(data[:, 1], data[:, 0])
-    row = row.astype(int)
-    col = col.astype(int)
+    row = data[:, 0]
+    col = data[:, 1]
     if data.ndim == 3:  # weighted graph
-        weight = np.append(data[:, 2], data[:, 2])
+        weight = data[:, 2]
     else:  # unweighted graph
-        weight = np.ones(2 * data.shape[0])
-    H = ss.csr_matrix((weight, (row, col)))
+        weight = np.ones(data.shape[0])
+    A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
+    rows, cols = A.nonzero()
+    A[cols, rows] = A[rows, cols]
+    A = A.tocsr()
+    return A, None
 
     # load normalized eigenvalues (if exist)
     eig_vals = None
@@ -91,16 +98,39 @@ def load_graph_from_txt(filepath):
     Load a graph matrix from adjacency list(txt)
     The ajacency list must be 0-indexed!
     """
-    data = np.loadtxt(filepath, comments='#')
-    row = np.append(data[:, 0], data[:, 1])
-    col = np.append(data[:, 1], data[:, 0])
-    row = row.astype(int)
-    col = col.astype(int)
+    data = np.loadtxt(filepath, dtype=int, comments='#')
+    row = data[:, 0]
+    col = data[:, 1]
+    N = max(row.max(), col.max()) + 1
     if data.ndim == 3:  # weighted graph
-        weight = np.append(data[:, 2], data[:, 2])
+        weight = data[:, 2]
     else:  # unweighted graph
-        weight = np.ones(2 * data.shape[0])
-    return ss.csr_matrix((weight, (row, col))), None
+        weight = np.ones(data.shape[0])
+    A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
+    rows, cols = A.nonzero()
+    A[cols, rows] = A[rows, cols]
+    A = A.tocsr()
+    return A, None
+
+
+def load_graph_from_csv(filepath):
+    """
+    Load a graph matrix from adjacency list(txt)
+    The ajacency list must be 0-indexed!
+    """
+    data = np.loadtxt(filepath, dtype=int, delimiter=',', skiprows=1)
+    row = data[:, 0]
+    col = data[:, 1]
+    N = max(row.max(), col.max()) + 1
+    if data.ndim == 3:  # weighted graph
+        weight = data[:, 2]
+    else:  # unweighted graph
+        weight = np.ones(data.shape[0])
+    A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
+    rows, cols = A.nonzero()
+    A[cols, rows] = A[rows, cols]
+    A = A.tocsr()
+    return A, None
 
 
 def load_graph_from_konect(filepath):
@@ -108,15 +138,70 @@ def load_graph_from_konect(filepath):
     Load a graph matrix (konect)
     The ajacency list must be 1-indexed!
     """
-    data = np.loadtxt(filepath, comments='%')
-    row = np.append(data[:, 0], data[:, 1])
-    col = np.append(data[:, 1], data[:, 0])
+    data = np.loadtxt(filepath, dtype=int, comments='%')
+    row = data[:, 0]
+    col = data[:, 1]
     row = row - 1
     col = col - 1
-    row = row.astype(int)
-    col = col.astype(int)
+    N = max(row.max(), col.max()) + 1
     if data.ndim == 3:  # weighted graph
-        weight = np.append(data[:, 2], data[:, 2])
+        weight = data[:, 2]
     else:  # unweighted graph
-        weight = np.ones(2 * data.shape[0])
-    return ss.csr_matrix((weight, (row, col))), None
+        weight = np.ones(data.shape[0])
+    A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
+    rows, cols = A.nonzero()
+    A[cols, rows] = A[rows, cols]
+    A = A.tocsr()
+    return A, None
+
+
+"""
+def coordinate_compress(raw_data):
+    vals = np.ndarray([])
+    data = np.empty((0, len(raw_data[0])))
+    for i in range(len(raw_data)):
+        e = raw_data[i, :]
+        if e[0] > e[1]:
+            e[0], e[1] = e[1], e[0]
+        data = np.vstack([data, e])
+        vals = np.append(vals, e[0])
+        vals = np.append(vals, e[1])
+    data = np.unique(data, axis=0)
+    vals = np.unique(vals)
+    vals.sort()
+    for i in range(len(data)):
+        e = data[i]
+        data[i, 0] = np.searchsorted(vals, e[0])
+        data[i, 1] = np.searchsorted(vals, e[1])
+    return data
+
+"""
+
+if __name__ == "__main__":
+    data = np.array([[0, 1], [0, 2], [0, 3], [1, 0], [1, 3], [2, 0], [3, 0],
+                     [3, 1]])
+    row = data[:, 0]
+    col = data[:, 1]
+    N = max(row.max(), col.max()) + 1
+    if data.ndim == 3:  # weighted graph
+        weight = data[:, 2]
+    else:  # unweighted graph
+        weight = np.ones(data.shape[0])
+    A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
+    rows, cols = A.nonzero()
+    A[cols, rows] = A[rows, cols]
+    A = A.tocsr()
+    print(A.toarray())
+
+    data = np.array([[0, 1, 2], [0, 2, 2], [0, 3, 2], [1, 3, 2]])
+    row = data[:, 0]
+    col = data[:, 1]
+    if data.ndim == 3:  # weighted graph
+        weight = data[:, 2]
+    else:  # unweighted graph
+        weight = np.ones(data.shape[0])
+    A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
+    rows, cols = A.nonzero()
+    A[cols, rows] = A[rows, cols]
+    A = A.tocsr()
+    print(A.toarray())
