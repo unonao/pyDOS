@@ -34,29 +34,40 @@ if __name__ == '__main__':
     par_dir = '../data/'
     db_dir = '../moments_db/'
     files = [
-        # human social networks
-        "konect/moreno_health/out.moreno_health_health",
+        # collaboration networks
+        "konect/ca-AstroPh/out.ca-AstroPh",
         # social networks
         "graph-eigs-v1/marvel-chars-cc.smat",
         "snap/facebook_combined.txt",
-        "snap/soc-Epinions1.txt",
-        # collaboration networks
-        "konect/ca-AstroPh/out.ca-AstroPh",
-        # communication networks
-        "snap/Email-Enron.txt",
-        "snap/Email-EuAll.txt",  # Autonomous systems
-        "graph-eigs-v1/Erdos02-cc.smat",  #(Erdos02-cc - Pajek's Erdos sample file, largest connected component.as-caida20060911 - SNAP)
-        # hyper-link(web graph)
-        "konect/web-NotreDame/out.web-NotreDame",
-        "konect/web-Stanford/out.web-Stanford",
-        # infrastructure
-        "konect/openflights/out.openflights",
-        "konect/opsahl-usairport/out.opsahl-usairport",
-        "konect/opsahl-powergrid/out.opsahl-powergrid",
+        "snap/deezer_clean_data/HR_edges.csv",
+        "snap/deezer_clean_data/HU_edges.csv",
+        "snap/deezer_clean_data/RO_edges.csv",
+        "snap/twitch/DE/musae_DE_edges.csv",
+        "snap/twitch/ENGB/musae_ENGB_edges.csv",
+        "snap/twitch/ES/musae_ES_edges.csv",
+        "snap/twitch/FR/musae_FR_edges.csv",
+        "snap/twitch/PTBR/musae_PTBR_edges.csv",
+        "snap/twitch/RU/musae_RU_edges.csv",
         # road network
         "minnesota.mat",
         "snap/roadNet-CA.txt",
-        "konect/dimacs9-NY/out.dimacs9-NY",
+        "snap/roadNet-PA.txt",
+        # infrastructure
+        "konect/opsahl-powergrid/out.opsahl-powergrid",
+        # Communication networks
+        "snap/Email-Enron.txt",
+        # Computer network
+        "konect/dimacs10-as-22july06/out.dimacs10-as-22july06",
+        # Online contact network
+        "konect/dnc-corecipient/out.dnc-corecipient",
+        # Affiliation network
+        "konect/youtube-groupmemberships/out.youtube-groupmemberships",
+        # Autonomous systems graphs
+        "snap/as20000102.txt",
+        # Wikipedia Article Networks
+        "snap/wikipedia/chameleon/musae_chameleon_edges.csv",
+        "snap/wikipedia/crocodile/musae_crocodile_edges.csv",
+        "snap/wikipedia/squirrel/musae_squirrel_edges.csv",
         # models
         "gen_model/Erdos-Renyi_random_graph_3000_3000.txt",
         "gen_model/Erdos-Renyi_random_graph_3000_30000.txt",
@@ -66,7 +77,6 @@ if __name__ == '__main__':
         "gen_model/small_world_5000_5_0.100.txt",
         "gen_model/forest_fire_5000_0.40_0.30.txt",
         "gen_model/forest_fire_5000_0.45_0.30.txt",
-        "gen_model/copying_model_5000_0.50.txt",
         "gen_model/grid_graph_200_200.txt",
         "gen_model/grid_graph_deleted_200_200.txt"
     ]
