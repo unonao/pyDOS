@@ -36,6 +36,7 @@ if __name__ == '__main__':
     files = [
         # collaboration networks
         "konect/ca-AstroPh/out.ca-AstroPh",
+        "snap/CA-HepPh.txt",
         # social networks
         "graph-eigs-v1/marvel-chars-cc.smat",
         "snap/facebook_combined.txt",
@@ -54,14 +55,13 @@ if __name__ == '__main__':
         "snap/roadNet-PA.txt",
         # infrastructure
         "konect/opsahl-powergrid/out.opsahl-powergrid",
+        "konect/opsahl-openflights/out.opsahl-openflights",
         # Communication networks
         "snap/Email-Enron.txt",
+        "konect/arenas-email/out.arenas-email",
         # Computer network
         "konect/dimacs10-as-22july06/out.dimacs10-as-22july06",
-        # Online contact network
-        "konect/dnc-corecipient/out.dnc-corecipient",
-        # Affiliation network
-        "konect/youtube-groupmemberships/out.youtube-groupmemberships",
+        "konect/as-caida20071105/out.as-caida20071105",
         # Autonomous systems graphs
         "snap/as20000102.txt",
         # Wikipedia Article Networks
