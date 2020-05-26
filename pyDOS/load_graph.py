@@ -43,7 +43,7 @@ def load_graph_from_smat(filepath):
     data = data[1:, :]
     row = data[:, 0]
     col = data[:, 1]
-    if data.ndim == 3:  # weighted graph
+    if len(data[0]) == 3:  # weighted graph
         weight = data[:, 2]
     else:  # unweighted graph
         weight = np.ones(data.shape[0])
@@ -51,7 +51,7 @@ def load_graph_from_smat(filepath):
     rows, cols = A.nonzero()
     A[cols, rows] = A[rows, cols]
     A = A.tocsr()
-    return A, None
+    A = remove_zero_entries(A)
 
     # load normalized eigenvalues (if exist)
     eig_vals = None
@@ -67,7 +67,7 @@ def load_graph_from_smat(filepath):
     else:
         eig_vals = 1 - eig_vals  # eig_vals are eigenvalues of the Normalized Laplacian Matrix
 
-    return H, eig_vals
+    return A, eig_vals
 
 
 def load_graph_from_mat(filepath, mname='A'):
@@ -102,7 +102,7 @@ def load_graph_from_txt(filepath):
     row = data[:, 0]
     col = data[:, 1]
     N = max(row.max(), col.max()) + 1
-    if data.ndim == 3:  # weighted graph
+    if len(data[0]) == 3:  # weighted graph
         weight = data[:, 2]
     else:  # unweighted graph
         weight = np.ones(data.shape[0])
@@ -110,6 +110,7 @@ def load_graph_from_txt(filepath):
     rows, cols = A.nonzero()
     A[cols, rows] = A[rows, cols]
     A = A.tocsr()
+    A = remove_zero_entries(A)
     return A, None
 
 
@@ -122,7 +123,7 @@ def load_graph_from_csv(filepath):
     row = data[:, 0]
     col = data[:, 1]
     N = max(row.max(), col.max()) + 1
-    if data.ndim == 3:  # weighted graph
+    if len(data[0]) == 3:  # weighted graph
         weight = data[:, 2]
     else:  # unweighted graph
         weight = np.ones(data.shape[0])
@@ -130,6 +131,7 @@ def load_graph_from_csv(filepath):
     rows, cols = A.nonzero()
     A[cols, rows] = A[rows, cols]
     A = A.tocsr()
+    A = remove_zero_entries(A)
     return A, None
 
 
@@ -144,46 +146,31 @@ def load_graph_from_konect(filepath):
     row = row - 1
     col = col - 1
     N = max(row.max(), col.max()) + 1
-    if data.ndim == 3:  # weighted graph
+    if len(data[0]) == 3:  # weighted graph
         weight = data[:, 2]
     else:  # unweighted graph
         weight = np.ones(data.shape[0])
     A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
     rows, cols = A.nonzero()
     A[cols, rows] = A[rows, cols]
-    A = A.tocsr()
+    A = remove_zero_entries(A)
     return A, None
 
 
-"""
-def coordinate_compress(raw_data):
-    vals = np.ndarray([])
-    data = np.empty((0, len(raw_data[0])))
-    for i in range(len(raw_data)):
-        e = raw_data[i, :]
-        if e[0] > e[1]:
-            e[0], e[1] = e[1], e[0]
-        data = np.vstack([data, e])
-        vals = np.append(vals, e[0])
-        vals = np.append(vals, e[1])
-    data = np.unique(data, axis=0)
-    vals = np.unique(vals)
-    vals.sort()
-    for i in range(len(data)):
-        e = data[i]
-        data[i, 0] = np.searchsorted(vals, e[0])
-        data[i, 1] = np.searchsorted(vals, e[1])
-    return data
+def remove_zero_entries(A):
+    A = A.tocsr()
+    A = A[A.getnnz(1) > 0]
+    A = A[:, A.getnnz(0) > 0]
+    return A
 
-"""
 
 if __name__ == "__main__":
     data = np.array([[0, 1], [0, 2], [0, 3], [1, 0], [1, 3], [2, 0], [3, 0],
-                     [3, 1]])
+                     [3, 1], [10, 1], [20, 3]])
     row = data[:, 0]
     col = data[:, 1]
     N = max(row.max(), col.max()) + 1
-    if data.ndim == 3:  # weighted graph
+    if len(data[0]) == 3:  # weighted graph
         weight = data[:, 2]
     else:  # unweighted graph
         weight = np.ones(data.shape[0])
@@ -191,12 +178,13 @@ if __name__ == "__main__":
     rows, cols = A.nonzero()
     A[cols, rows] = A[rows, cols]
     A = A.tocsr()
+    A = remove_zero_entries(A)
     print(A.toarray())
 
     data = np.array([[0, 1, 2], [0, 2, 2], [0, 3, 2], [1, 3, 2]])
     row = data[:, 0]
     col = data[:, 1]
-    if data.ndim == 3:  # weighted graph
+    if len(data[0]) == 3:  # weighted graph
         weight = data[:, 2]
     else:  # unweighted graph
         weight = np.ones(data.shape[0])
@@ -204,4 +192,5 @@ if __name__ == "__main__":
     rows, cols = A.nonzero()
     A[cols, rows] = A[rows, cols]
     A = A.tocsr()
+    A = remove_zero_entries(A)
     print(A.toarray())
