@@ -7,4 +7,6 @@ data/gen_model
 data/konect
 data/snap
 data/graph-eigs-v1
+data/generated_graphs
+.png
 .DS_Store

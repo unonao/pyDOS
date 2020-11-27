@@ -19,6 +19,72 @@ from pyDOS import cal_for_chebhist, cal_for_cheb_density
 from pyDOS import filter_jackson
 from pyDOS.moments import dos_by_cheb
 
+sample_files = [
+    # collaboration networks
+    "konect/ca-AstroPh/out.ca-AstroPh",
+    # social networks
+    "graph-eigs-v1/marvel-chars-cc.smat",
+    "snap/facebook_combined.txt",
+    # road network
+    "minnesota.mat",
+]
+road_files = [
+    # road network
+    "minnesota.mat",
+    "snap/roadNet-CA.txt",
+    "snap/roadNet-PA.txt",
+    "gen_model/grid_graph_200_200.txt",
+    "gen_model/grid_graph_deleted_200_200.txt"
+]
+all_files = [
+    # collaboration networks
+    "konect/ca-AstroPh/out.ca-AstroPh",
+    "snap/CA-HepPh.txt",
+    # social networks
+    "graph-eigs-v1/marvel-chars-cc.smat",
+    "snap/facebook_combined.txt",
+    "snap/deezer_clean_data/HR_edges.csv",
+    "snap/deezer_clean_data/HU_edges.csv",
+    "snap/deezer_clean_data/RO_edges.csv",
+    "snap/twitch/DE/musae_DE_edges.csv",
+    "snap/twitch/ENGB/musae_ENGB_edges.csv",
+    "snap/twitch/ES/musae_ES_edges.csv",
+    "snap/twitch/FR/musae_FR_edges.csv",
+    "snap/twitch/PTBR/musae_PTBR_edges.csv",
+    "snap/twitch/RU/musae_RU_edges.csv",
+    # road network
+    "minnesota.mat",
+    "snap/roadNet-CA.txt",
+    "snap/roadNet-PA.txt",
+    # infrastructure
+    "konect/opsahl-powergrid/out.opsahl-powergrid",
+    "konect/opsahl-openflights/out.opsahl-openflights",
+    # Communication networks
+    "snap/Email-Enron.txt",
+    "konect/arenas-email/out.arenas-email",
+    # Computer network
+    "konect/dimacs10-as-22july06/out.dimacs10-as-22july06",
+    "konect/as-caida20071105/out.as-caida20071105",
+    "snap/as20000102.txt",
+    # Hyperlink Networks
+    "konect/cfinder-google/out.cfinder-google",
+    # Wikipedia Article Networks
+    "snap/wikipedia/chameleon/musae_chameleon_edges.csv",
+    "snap/wikipedia/crocodile/musae_crocodile_edges.csv",
+    "snap/wikipedia/squirrel/musae_squirrel_edges.csv",
+    # models
+    "gen_model/Erdos-Renyi_random_graph_3000_3000.txt",
+    "gen_model/Erdos-Renyi_random_graph_3000_30000.txt",
+    "gen_model/scale-free_3000_1.txt",
+    "gen_model/scale-free_3000_5.txt",
+    "gen_model/small_world_5000_5_0.010.txt",
+    "gen_model/small_world_5000_5_0.100.txt",
+    "gen_model/forest_fire_5000_0.40_0.30.txt",
+    "gen_model/forest_fire_5000_0.45_0.30.txt",
+    "gen_model/grid_graph_200_200.txt",
+    "gen_model/grid_graph_deleted_200_200.txt"
+]
+
 if __name__ == '__main__':
     # command line args
     kind = 0 if len(args) <= 1 else int(
@@ -33,53 +99,9 @@ if __name__ == '__main__':
 
     par_dir = '../data/'
     db_dir = '../moments_db/'
-    files = [
-        # collaboration networks
-        "konect/ca-AstroPh/out.ca-AstroPh",
-        "snap/CA-HepPh.txt",
-        # social networks
-        "graph-eigs-v1/marvel-chars-cc.smat",
-        "snap/facebook_combined.txt",
-        "snap/deezer_clean_data/HR_edges.csv",
-        "snap/deezer_clean_data/HU_edges.csv",
-        "snap/deezer_clean_data/RO_edges.csv",
-        "snap/twitch/DE/musae_DE_edges.csv",
-        "snap/twitch/ENGB/musae_ENGB_edges.csv",
-        "snap/twitch/ES/musae_ES_edges.csv",
-        "snap/twitch/FR/musae_FR_edges.csv",
-        "snap/twitch/PTBR/musae_PTBR_edges.csv",
-        "snap/twitch/RU/musae_RU_edges.csv",
-        # road network
-        "minnesota.mat",
-        "snap/roadNet-CA.txt",
-        "snap/roadNet-PA.txt",
-        # infrastructure
-        "konect/opsahl-powergrid/out.opsahl-powergrid",
-        "konect/opsahl-openflights/out.opsahl-openflights",
-        # Communication networks
-        "snap/Email-Enron.txt",
-        "konect/arenas-email/out.arenas-email",
-        # Computer network
-        "konect/dimacs10-as-22july06/out.dimacs10-as-22july06",
-        "konect/as-caida20071105/out.as-caida20071105",
-        # Autonomous systems graphs
-        "snap/as20000102.txt",
-        # Wikipedia Article Networks
-        "snap/wikipedia/chameleon/musae_chameleon_edges.csv",
-        "snap/wikipedia/crocodile/musae_crocodile_edges.csv",
-        "snap/wikipedia/squirrel/musae_squirrel_edges.csv",
-        # models
-        "gen_model/Erdos-Renyi_random_graph_3000_3000.txt",
-        "gen_model/Erdos-Renyi_random_graph_3000_30000.txt",
-        "gen_model/scale-free_3000_1.txt",
-        "gen_model/scale-free_3000_5.txt",
-        "gen_model/small_world_5000_5_0.010.txt",
-        "gen_model/small_world_5000_5_0.100.txt",
-        "gen_model/forest_fire_5000_0.40_0.30.txt",
-        "gen_model/forest_fire_5000_0.45_0.30.txt",
-        "gen_model/grid_graph_200_200.txt",
-        "gen_model/grid_graph_deleted_200_200.txt"
-    ]
+
+    # change files
+    files = road_files
 
     print("method:\t{}".format(method))
     print('Nz:\t{}'.format(Nz))

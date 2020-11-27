@@ -13,7 +13,6 @@ def load_graph(filepath):
     Load a graph matrix as an undirected graph
     Args:
         filepath: filepath. It does not matter whether file extention is 'smat', 'mat' or 'txt'.
-
     """
     head_tail = os.path.split(filepath)
     (name, ext) = os.path.splitext(head_tail[-1])

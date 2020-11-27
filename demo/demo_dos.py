@@ -72,8 +72,9 @@ if __name__ == '__main__':
 
     # plot prob function
     """
-    bin_size = N // bin_num
-    X = np.linspace(lmin + 1e-8, lmax - 1e-8, 100)
+    # plot prob function
+    bin_size = N / bin_num
+    X = np.linspace(lmin + 1e-1, lmax - 1e-1, bin_num)
     Y = cal_for_cheb_density(df, X) * bin_size
     plt.plot(X, Y)
     """
