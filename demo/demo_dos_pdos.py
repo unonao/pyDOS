@@ -1,3 +1,4 @@
+from numpy import linalg as LA
 import os
 import sys
 sys.path.append('../')
@@ -7,7 +8,6 @@ from scipy import linalg
 import scipy.sparse as ss
 import scipy.sparse.linalg as ssla
 import matplotlib.pyplot as plt
-
 from pyDOS import load_graph, normalize_matrix
 from pyDOS import cal_for_chebhist, cal_for_cheb_density
 from pyDOS import filter_jackson
@@ -19,8 +19,8 @@ if __name__ == '__main__':
     filepath = '../data/facebook_combined.txt' if len(args) <= 1 else args[1]
     method = 'cheb' if len(args) <= 2 else str(args[2])
     Nz = 20 if len(args) <= 3 else int(args[3])
-    moment_num = 500 if len(args) <= 4 else int(args[4])
-    bin_num = 51 if len(args) <= 5 else int(
+    moment_num = 1000 if len(args) <= 4 else int(args[4])
+    bin_num = 101 if len(args) <= 5 else int(
         args[5])  # bin_num should be odd (to avoid splitting true λ=0)
     is_filter = True if len(args) <= 6 else bool(args[6])
 

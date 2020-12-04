@@ -107,7 +107,7 @@ def load_graph_from_txt(filepath):
         weight = np.ones(data.shape[0])
     A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
     rows, cols = A.nonzero()
-    A[cols, rows] = A[rows, cols]
+    A[cols, rows] = A[rows, cols] # symmetric
     A = A.tocsr()
     A = remove_zero_entries(A)
     return A, None
