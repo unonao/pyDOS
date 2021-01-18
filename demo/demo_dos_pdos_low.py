@@ -49,7 +49,7 @@ if __name__ == '__main__':
             true_eig_vals = LA.eigvalsh(H.toarray())
 
     # for plot
-    fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(4,6))
+    fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(12, 5))
 
     #
     # DOS
@@ -79,8 +79,8 @@ if __name__ == '__main__':
     ax1.plot(Xmid, Ymid, 'r.', 60)
     #### setting
     ax1.set_xlim(lmin, lmax)
-    ax1.set_ylim(0)
-    # ax1.set_title('DOS')
+    ax1.set_ylim(0,500)
+    ax1.set_title('DOS')
     ax1.set_xlabel('λ')
     ax1.set_ylabel('Count')
 
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
     extent = -1, 1, N, 0
     ax2.imshow(Y[idx, :], cmap='jet', aspect='auto', extent=extent)
-    # ax2.set_title("PDOS")
+    ax2.set_title("PDOS")
     ax2.set_xlabel('λ')
     ax2.set_ylabel('Node Index')
 
@@ -125,6 +125,7 @@ if __name__ == '__main__':
     # fig show
     #
     base_name = os.path.basename(filepath)
+
     """
     plot_title = '{} (Nz:{}, M:{}, bins:{})'.format(base_name, Nz, moment_num,
                                                     bin_num)

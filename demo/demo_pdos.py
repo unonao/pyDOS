@@ -11,14 +11,8 @@ from pyDOS import load_graph, normalize_matrix
 from pyDOS import filter_jackson
 from pyDOS.moments import pdos_by_cheb
 
-if __name__ == '__main__':
-    # command line args
-    filepath = '../data/HepTh.mat' if len(args) <= 1 else args[1]
-    method = 'cheb' if len(args) <= 2 else str(args[2])
-    Nz = 20 if len(args) <= 3 else int(args[3])
-    moment_num = 500 if len(args) <= 4 else int(args[4])
-    bin_num = 51 if len(args) <= 5 else int(args[5])
-    is_filter = True if len(args) <= 6 else bool(args[6])
+
+def save_pdos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False):
     # load graph network
     (H, true_eig_vals) = load_graph(filepath)
     N = H.shape[0]
@@ -77,10 +71,23 @@ if __name__ == '__main__':
     plt.ylabel('Node Index')
 
     base_name = os.path.basename(filepath)
-
+    """
     plot_title = 'PDOS: {} (Nz:{}, M:{}, bins:{})'.format(
         base_name, Nz, moment_num, bin_num)
     plt.title(plot_title)
+    """
+    plt.savefig('../plot/' + base_name + '_pdos.png', bbox_inches='tight', pad_inches=0.05)
+    if is_show:
+        plt.show()
 
-    plt.savefig('../plot/' + base_name + '_pdos.png')
-    plt.show()
+if __name__ == '__main__':
+    # command line args
+    filepath = '../data/HepTh.mat' if len(args) <= 1 else args[1]
+    method = 'cheb' if len(args) <= 2 else str(args[2])
+    Nz = 20 if len(args) <= 3 else int(args[3])
+    moment_num = 1000 if len(args) <= 4 else int(args[4])
+    bin_num = 51 if len(args) <= 5 else int(args[5])
+    is_filter = True if len(args) <= 6 else bool(args[6])
+
+
+    save_pdos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False)
