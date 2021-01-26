@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import numpy.linalg as LA
+import pandas as pd
 import scipy.io as sio
 import scipy.sparse as ss
 from scipy.sparse import SparseEfficiencyWarning
@@ -12,7 +13,7 @@ def load_graph(filepath):
     """
     Load a graph matrix as an undirected graph
     Args:
-        filepath: filepath. It does not matter whether file extention is 'smat', 'mat' or 'txt'.
+        filepath: filepath.
     """
     head_tail = os.path.split(filepath)
     (name, ext) = os.path.splitext(head_tail[-1])
@@ -20,6 +21,8 @@ def load_graph(filepath):
         return load_graph_from_smat(filepath)
     elif ext == '.mat':
         return load_graph_from_mat(filepath)
+    elif ext == '.mtx':
+        return load_graph_from_mtx(filepath)
     elif ext == '.txt':
         return load_graph_from_txt(filepath)
     elif ext == '.csv':
@@ -133,6 +136,27 @@ def load_graph_from_csv(filepath):
     A = remove_zero_entries(A)
     return A, None
 
+
+def load_graph_from_mtx(filepath):
+    """
+    Load a graph matrix from adjacency list(txt)
+    The ajacency list must be 0-indexed!
+    """
+    df = pd.read_csv(filepath, delimiter="\s+", comment="%")
+    data = df.iloc[:, :2].values
+    row = data[:, 0]
+    col = data[:, 1]
+    N = max(row.max(), col.max()) + 1
+    if len(data[0]) == 3:  # weighted graph
+        weight = data[:, 2]
+    else:  # unweighted graph
+        weight = np.ones(data.shape[0])
+    A = ss.csr_matrix((weight, (row, col)), shape=(N, N)).tolil()
+    rows, cols = A.nonzero()
+    A[cols, rows] = A[rows, cols]
+    A = A.tocsr()
+    A = remove_zero_entries(A)
+    return A, None
 
 def load_graph_from_konect(filepath):
     """

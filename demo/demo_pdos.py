@@ -12,7 +12,7 @@ from pyDOS import filter_jackson
 from pyDOS.moments import pdos_by_cheb
 
 
-def save_pdos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False):
+def save_pdos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False, save_dir='../plot/'):
     # load graph network
     (H, true_eig_vals) = load_graph(filepath)
     N = H.shape[0]
@@ -66,19 +66,23 @@ def save_pdos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=Fals
     top = np.max(Y)
 
     extent = -1, 1, N, 0
+    plt.figure(figsize=(8, 6))
+    plt.rcParams["font.size"] = 20
+
     plt.imshow(Y[idx, :], cmap='jet', aspect='auto', extent=extent)
     plt.xlabel('λ')
     plt.ylabel('Node Index')
 
-    base_name = os.path.basename(filepath)
+    base_name = os.path.basename(filepath).replace(".", "").replace(" ", "")
     """
     plot_title = 'PDOS: {} (Nz:{}, M:{}, bins:{})'.format(
         base_name, Nz, moment_num, bin_num)
     plt.title(plot_title)
     """
-    plt.savefig('../plot/' + base_name + '_pdos.png', bbox_inches='tight', pad_inches=0.05)
+    plt.savefig(save_dir + base_name + '_pdos.png', bbox_inches='tight', pad_inches=0.)
     if is_show:
         plt.show()
+    plt.close()
 
 if __name__ == '__main__':
     # command line args
@@ -90,4 +94,4 @@ if __name__ == '__main__':
     is_filter = True if len(args) <= 6 else bool(args[6])
 
 
-    save_pdos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False)
+    save_pdos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=True)

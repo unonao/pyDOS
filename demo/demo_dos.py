@@ -12,7 +12,8 @@ from pyDOS import cal_for_chebhist, cal_for_cheb_density
 from pyDOS import filter_jackson
 from pyDOS.moments import dos_by_cheb
 
-def save_dos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False):
+
+def save_dos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False, save_dir='../plot/', ylim = None):
 
     # load graph network
     (H, true_eig_vals) = load_graph(filepath)
@@ -54,7 +55,11 @@ def save_dos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False
 
     lmin = -1
     lmax = 1
-    plt.figure()
+    plt.figure(figsize=(8, 6))
+    plt.rcParams["font.size"] = 20
+    plt.gca().spines['right'].set_visible(False)
+    plt.gca().spines['top'].set_visible(False)
+
     X = np.linspace(lmin, lmax, bin_num + 1)
     if true_eig_vals is not None:
         #lmin = max(min(true_eig_vals), -1)
@@ -76,9 +81,12 @@ def save_dos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False
 
     # setting
     plt.xlim(lmin, lmax)
-    plt.ylim(0)
+    if ylim == None:
+        plt.ylim(0)
+    else:
+        plt.ylim(0, ylim)
 
-    base_name = os.path.basename(filepath)
+    base_name = os.path.basename(filepath).replace(".", "").replace(" ", "")
 
     """
     plot_title = 'DOS: {} (Nz:{}, M:{}, bins:{})'.format(
@@ -88,9 +96,10 @@ def save_dos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=False
     plt.xlabel('λ')
     plt.ylabel('Count')
 
-    plt.savefig('../plot/' + base_name + '_dos.png', bbox_inches='tight', pad_inches=0.05)
+    plt.savefig(save_dir + base_name + '_dos.png', bbox_inches='tight', pad_inches=0.)
     if is_show:
         plt.show()
+    plt.close()
 
 
 if __name__ == '__main__':
@@ -105,4 +114,6 @@ if __name__ == '__main__':
         args[5])  # bin_num should be odd (to avoid splitting true λ=0)
     is_filter = True if len(args) <= 6 else bool(args[6])
 
-    save_dos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=True)
+    ylim = None
+
+    save_dos(filepath, method, Nz, moment_num, bin_num, is_filter, is_show=True, ylim=ylim)

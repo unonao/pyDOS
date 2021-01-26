@@ -6,7 +6,11 @@ moments_db/*
 data/gen_model
 data/konect
 data/snap
+data/net_repo
 data/graph-eigs-v1
 data/generated_graphs
+demo/real_world_net.ipynb
+demo/save_all.py
 .png
 .DS_Store
+.ipynb_*
